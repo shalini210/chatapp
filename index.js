@@ -14,6 +14,19 @@ app.get("/",(req,res)=>
 })
 io.on('connection', (socket) => {
   console.log('a user connected id: '+ socket.id);
+  let clientname = ""
+  socket.on('ClientName',(username)=>
+  {
+      console.log(username)
+      clientname = username
+  })
+  socket.on("ClientMsg",(msg)=>
+  {
+    msg = (clientname +" : "+msg)
+    io.emit("serverMsg",(msg))
+  })
+  
+
    socket.on('disconnect', () => {
     console.log('user disconnected');
   });
