@@ -20,23 +20,36 @@
 
     </ul>
     <form id="form" action="">
+      <input type="text" id="username" disabled>
+      <input type="text" id="clientID">
       <input id="input" autocomplete="off" />
       <button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io();
+
   let username = prompt("Enter name ")
+  let usernameinput = document.getElementById("username")
+  usernameinput.value=username
   socket.emit("ClientName",username)
  
   let form = document.getElementById("form")
   let input = document.getElementById("input")
+  
+let clientID = document.getElementById("clientID")
   form.addEventListener("submit",(e)=>
 
   {
     e.preventDefault();
     let msg = input.value;
-    socket.emit("ClientMsg",msg)
+    let idformsg = clientID.value;
+
+      let li = document.createElement("li")
+  li.innerHTML =username+":"+msg;
+  document.getElementById("messages").appendChild(li)
+
+    socket.emit("ClientMsg",msg,idformsg)
     input.value=""
 
   })
