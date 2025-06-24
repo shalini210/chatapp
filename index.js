@@ -3,8 +3,11 @@ const config = require("./dbconfig")
 const app = express()
 const userRouter = require("./routers/userRouter")
 const {join} = require("path")
+const cors = require("cors")
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+
 app.get("/",(req,res)=>
 {
     res.sendFile(join(__dirname,"index.html"))

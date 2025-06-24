@@ -5,34 +5,41 @@ router.post("/",async(req,res)=>
 {
     let s = 
     {
-       name:req.body.name,
-      
+         name:req.body.name,      
          email:req.body.email,
-         password:req.body.password,
-         
-          
+         password:req.body.password,                   
     }
-    // {name:req.body.name,
-    //     age:parseInt(req.body.age)
-    //     ,city:req.body.city}
+
         let m = await userController.insertuser(s)
         res.send(m)
     })
-// router.get("/",async(req,res)=>
+router.get("/userhome/:id",(req,res)=>
+{
+  
+  res.send("this is for get of demo ")
+})
+router.get("/login",async(req,res)=>
+{
+  // res.redirect("/user/fordemo");
+    res.sendFile(__dirname+"/loginform.html")
+})
+router.post("/login",async (req,res)=>
+{
+  let d = await  userController.loginuser(req.body)
+  if(d.msg =="login success")
+  {
+    res.redirect("/user/userhome/"+d.user._id)
+  }
+  else
+  {
+    res.sendFile(__dirname+"/loginform.html")
+  }
+//   login success"
+//   }
+//   else
 // {
-//     let users = await userController.getusers()
-//     res.send({data:users})
-// })
-// router.get("/city",async (req,res)=>{
-//     let data = await userController.getcities()
-//     res.send(data)
-// })
-// router.get("/:id",async(req,res)=>
-// {
-//     let id = req.params.id
-//     let users = await userController.getuserById(id)
-//     res.send({data:users})
-// })
+//   msg = "invalid user"
+})
 router.put("/",async(req,res)=>
 {
       let email = req.body.email;

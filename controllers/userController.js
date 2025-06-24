@@ -11,6 +11,25 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+exports.loginuser = async (u)=>
+{    
+  let condition = {email:u.email,
+    password:u.password,
+    verified:true};
+  let data = await userModel.find(condition);
+  let user = {}
+  if(data.length>0)
+  {
+    user = data[0];
+    msg = "login success"
+  }
+  else
+{
+  msg = "invalid user"
+}
+console.log(condition)
+  return {user:user,msg:msg}
+}
 
 exports.insertuser =async (s)=>
 {

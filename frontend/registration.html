@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Page</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .Registration-form {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      width: 350px;
+    }
+
+    .Registration-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #0072ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #005ac2;
+    }
+  </style>
+</head>
+<body>
+  <form class="Registration-form"
+   onsubmit="return validateForm()">
+    <h2>Registration</h2>
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name"/>
+      <div class="error" id="nameError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email"/>
+      <div class="error" id="emailError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"/>
+      <div class="error" id="passwordError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword"/>
+      <div class="error" id="confirmPasswordError"></div>
+    </div>
+
+    <button type="submit" class="submit-btn" >Registration</button>
+  </form>
+
+  <script>
+    function validateForm() {
+      let isValid = true;
+
+      // Reset errors
+      document.getElementById('nameError').innerText = '';
+      document.getElementById('emailError').innerText = '';
+      document.getElementById('passwordError').innerText = '';
+      document.getElementById('confirmPasswordError').innerText = '';
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (name.length < 3) {
+        document.getElementById('nameError').innerText = 'Name must be at least 3 characters.';
+        isValid = false;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('emailError').innerText = 'Enter a valid email address.';
+        isValid = false;
+      }
+
+      if (password.length < 6) {
+        document.getElementById('passwordError').innerText = 'Password must be at least 6 characters.';
+        isValid = false;
+      }
+
+      if (confirmPassword !== password) {
+        document.getElementById('confirmPasswordError').innerText = 'Passwords do not match.';
+        isValid = false;
+      }
+
+      if(isValid)
+      {
+       
+    const data = { name:name , email:email,password:password};
+    fetch('http://localhost:8080/user/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+})
+    .then(response => response.json())
+    .then(result => alert(result.msg));
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>
