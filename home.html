@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #e6f2ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Welcome Home!</h2>
+  <pre id="userData"></pre>
+</div>
+
+<button onclick="logout()">Logout</button>
+<button onclick="gotochat()">Chat Room</button>
+
+<script>
+  const userData = sessionStorage.getItem('userData');
+  if (userData) {
+    document.getElementById('userData').textContent = JSON.stringify(JSON.parse(userData), null, 2);
+  } else {
+    document.getElementById('userData').textContent = "No user data found. Please login.";
+  }
+
+  function logout() {
+    sessionStorage.clear(); // or sessionStorage.removeItem('userData');
+    window.location.href = "login";
+  }
+  async function gotochat()
+  {
+    let apiurl ="http://localhost:8080/chathome"
+    const response = await fetch(apiurl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: (userData)
+      });
+      // response.then((d)=>console.log(d))
+      console.log(response.url)
+      window.location.href = response.url
+  }
+</script>
+
+</body>
+</html>

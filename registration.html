@@ -146,7 +146,9 @@
     body: JSON.stringify(data)
 })
     .then(response => response.json())
-    .then(result => alert(result.msg));
+    .then(result =>{ alert(result.msg)
+      
+     window.location.href = "login.html";});
       }
       return false;
     }

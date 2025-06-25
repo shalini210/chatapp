@@ -13,27 +13,20 @@ router.post("/",async(req,res)=>
         let m = await userController.insertuser(s)
         res.send(m)
     })
-router.get("/userhome/:id",(req,res)=>
-{
+// router.get("/userhome/:id",(req,res)=>
+// {
   
-  res.send("this is for get of demo ")
-})
-router.get("/login",async(req,res)=>
-{
-  // res.redirect("/user/fordemo");
-    res.sendFile(__dirname+"/loginform.html")
-})
+//   res.send("this is for get of demo ")
+// })
+// router.get("/login",async(req,res)=>
+// {
+//   // res.redirect("/user/fordemo");
+//     res.sendFile(__dirname+"/loginform.html")
+// })
 router.post("/login",async (req,res)=>
 {
   let d = await  userController.loginuser(req.body)
-  if(d.msg =="login success")
-  {
-    res.redirect("/user/userhome/"+d.user._id)
-  }
-  else
-  {
-    res.sendFile(__dirname+"/loginform.html")
-  }
+  res.send(d)
 //   login success"
 //   }
 //   else
