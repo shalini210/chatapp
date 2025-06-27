@@ -50,8 +50,21 @@ app.get("/chathome",(req,res)=>
     // res.redirect("/index")
     res.sendFile(join(__dirname,"index.html"))
 })
+let onlineUsers=[]
+  
 io.on('connection', (socket) => {
+  
   console.log('a user connected id: '+ socket.id);
+ 
+  socket.on("ClientName",(data)=>
+  {
+    onlineUsers.push({username:data.username,id:data.id,
+      socketId:socket.id
+    })
+    console.log(onlineUsers)
+    io.emit("onlineUsers",(onlineUsers))
+  })
+
   socket.on("chatmsg",(msg,username)=>
   {
     console.log("message : "+msg)
@@ -59,6 +72,11 @@ io.on('connection', (socket) => {
   
   })
    socket.on('disconnect', () => {
+    console.log(socket.id)
+    let index = onlineUsers.findIndex((u)=>u.socketId==socket.id)
+    onlineUsers.splice(index,1)
+   io.emit("onlineUsers",(onlineUsers))
+    console.log(index)
     console.log('user disconnected');
   });
   
