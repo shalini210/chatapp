@@ -12,7 +12,10 @@ const server = createServer(app);
 
 const { Server } = require('socket.io');
 
-const io = new Server(server);
+const io = new Server(server,()=>
+{
+  connectionStateRecovery:{}
+});
 const users= []
 
 
@@ -27,7 +30,15 @@ app.get("/login",(req,res)=>
 {
   res.sendFile(__dirname+"/login.html")
 })
+app.get("/verifyOTP/:email",(req,res)=>
+{
+  res.sendFile(__dirname+`/verifyOTP.html?email=${req.params.email}`)
+})
 
+app.get("/registration",(req,res)=>
+{
+  res.sendFile(__dirname+"/registration.html")
+})
 app.get("/home",(req,res)=>
 {
   res.sendFile(__dirname+"/home.html")
@@ -35,7 +46,7 @@ app.get("/home",(req,res)=>
 
 app.get("/",(req,res)=>
 {
-    res.sendFile(join(__dirname,"index.html"))
+    res.sendFile(join(__dirname,"MainHome.html"))
 })
 app.get("/index",(req,res)=>
 {
@@ -53,35 +64,47 @@ app.get("/chathome",(req,res)=>
 let onlineUsers=[]
   
 io.on('connection', (socket) => {
-  
+  let socketid = socket.id
   console.log('a user connected id: '+ socket.id);
- 
   socket.on("ClientName",(data)=>
   {
+    let id = data.id;
+    let index = onlineUsers.findIndex((u)=>u.id===id)
+  
+    if(index == (-1))
+    {
     onlineUsers.push({username:data.username,id:data.id,
       socketId:socket.id
     })
+  }
+  else
+  {
+    onlineUsers[index].socketId=socket.id
+  }
     console.log(onlineUsers)
     io.emit("onlineUsers",(onlineUsers))
   })
 
-  socket.on("chatmsg",(msg,username)=>
+  socket.on("ClientMsg",(data)=>
   {
-    console.log("message : "+msg)
-    io.emit("servermsg",msg,username)
+    console.log("message : "+data.msg)
+    let msg = data.username +" : "+ data.msg
+    io.emit("serverMsg",msg)
   
   })
-   socket.on('disconnect', () => {
-    console.log(socket.id)
-    let index = onlineUsers.findIndex((u)=>u.socketId==socket.id)
-    onlineUsers.splice(index,1)
-   io.emit("onlineUsers",(onlineUsers))
-    console.log(index)
-    console.log('user disconnected');
-  });
+  //  socket.on('refresh', () => {
+  //   console.log(socket.id)
+    
+  //   let index = onlineUsers.findIndex((u)=>u.socketId==socketid)
+  //   console.log("on index valeu" +index)
+  //   onlineUsers.splice(index,1)
+  //  io.emit("onlineUsers",(onlineUsers))
+  //   console.log(index)
+  //   console.log('user disconnected');
+  // });
   
 });
 
 server.listen(8080, () => {
   console.log('server running at http://localhost:8080');
-});
+}); 

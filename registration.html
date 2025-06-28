@@ -98,8 +98,10 @@
     </div>
 
     <button type="submit" class="submit-btn" >Registration</button>
+    already have an account ? 
+ <a href="/login">Login</a>
   </form>
-
+  
   <script>
     function validateForm() {
       let isValid = true;
@@ -148,7 +150,7 @@
     .then(response => response.json())
     .then(result =>{ alert(result.msg)
       
-     window.location.href = "login.html";});
+     window.location.href = "verifyOTP/"+email;});
       }
       return false;
     }

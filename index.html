@@ -53,18 +53,20 @@ let clientID = document.getElementById("clientID")
   {
     e.preventDefault();
     let msg = input.value;
-    let idformsg = clientID.value;
+    // let idformsg = clientID.value;
 
-      let li = document.createElement("li")
-  li.innerHTML =username+":"+msg;
-  document.getElementById("messages").appendChild(li)
+  //     let li = document.createElement("li")
+  // li.innerHTML =username+":"+msg;
+  // document.getElementById("messages").appendChild(li)
 
-    socket.emit("ClientMsg",msg,idformsg)
+  let data = {msg:msg,username:username}
+    socket.emit("ClientMsg",data)
     input.value=""
 
   })
    socket.on("serverMsg",(msg)=>
 {
+  
   let li = document.createElement("li")
   li.innerHTML =msg;
   document.getElementById("messages").appendChild(li)

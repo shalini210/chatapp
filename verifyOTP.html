@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+          const queryString = window.location.search;
+         const urlParams = new URLSearchParams(queryString);
+      const email = urlParams.get('email'); // Retrieves the value associated with 'product'
+//     const colorValue = urlParams.get('color');   // Retrieves the value associated with 'color'
+//         let params = (window.location.search);
+// let email = params.get("email"); // is the string "Jonathan"
+// let age = parseInt(params.get("age"), 10);
+console.log(email)
+    </script>
+</head>
+<body>
+    <form action="" method="get">
+    Enter OTP: <input type="text" name="otp">
+    <input type="submit" value="Verify">
+    </form>
+</body>
+</html>
