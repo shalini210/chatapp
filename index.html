@@ -9,7 +9,11 @@
       #input { border:  none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
       #input:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-
+      #onlineusersul
+      {
+        /* padding: 0px; */
+        margin:0px;
+      }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
@@ -17,15 +21,20 @@
    
   </head>
   <body>
-    <ul id="onlineusersul">
+    <div style="display: flex;height:100dvh;">
+    <ul id="onlineusersul"
+     style="background-color: skyblue;width: 20%;
+     ">
 
     </ul>
-    <ul id="messages">
+    <ul id="messages" style="overflow-y: scroll;width:80%;">
 
     </ul>
+    </div>
     <form id="form" action="">
       <input type="text" id="username" disabled>
-      <input type="text" id="clientID">
+      to: <input type="text" id="clientID" disabled
+      >
       <input id="input" autocomplete="off" />
       <button>Send</button>
     </form>
@@ -59,7 +68,7 @@ let clientID = document.getElementById("clientID")
   // li.innerHTML =username+":"+msg;
   // document.getElementById("messages").appendChild(li)
 
-  let data = {msg:msg,username:username}
+  let data = {msg:msg,username:username,to:document.getElementById("clientID").value}
     socket.emit("ClientMsg",data)
     input.value=""
 
@@ -80,9 +89,14 @@ socket.on("onlineUsers",(users)=>
 {
   let li = document.createElement("li");
   li.innerHTML=user.username;
+  li.addEventListener("click",()=>settoname(user.username))
   onlineusersUL.appendChild(li)
 })
 })
+function settoname(n)
+{
+  document.getElementById("clientID").value = n
+}
 </script>
   </body>
 </html>

@@ -4,14 +4,9 @@ const app = express()
 const userRouter = require("./routers/userRouter")
 const {join} = require("path")
 const cors = require("cors")
-
 const { createServer } = require('http');
-
 const server = createServer(app);
-
-
 const { Server } = require('socket.io');
-
 const io = new Server(server,()=>
 {
   connectionStateRecovery:{}
@@ -30,9 +25,14 @@ app.get("/login",(req,res)=>
 {
   res.sendFile(__dirname+"/login.html")
 })
+app.get("/verifyOTP",(req,res)=>
+{
+  res.sendFile(__dirname+"/verifyOTP.html")
+})
 app.get("/verifyOTP/:email",(req,res)=>
 {
-  res.sendFile(__dirname+`/verifyOTP.html?email=${req.params.email}`)
+  res.redirect("/verifyOTP?email="+req.params.email)
+  // res.sendFile(__dirname+`/verifyOTP.html?email=${req.params.email}`)
 })
 
 app.get("/registration",(req,res)=>
@@ -88,7 +88,12 @@ io.on('connection', (socket) => {
   socket.on("ClientMsg",(data)=>
   {
     console.log("message : "+data.msg)
-    let msg = data.username +" : "+ data.msg
+    var to = "";
+    if(data.to!="")
+    {
+      to="@"+data.to
+    }
+    let msg = data.username +" :  "+to +" "+ data.msg
     io.emit("serverMsg",msg)
   
   })
